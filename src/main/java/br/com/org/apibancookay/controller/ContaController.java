@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.org.apibancookay.dto.ClienteDto;
 import br.com.org.apibancookay.dto.ContaDto;
+import br.com.org.apibancookay.interfaces.ClienteServiceInterface;
+import br.com.org.apibancookay.interfaces.ContaServiceInterface;
 import br.com.org.apibancookay.model.Cliente;
 import br.com.org.apibancookay.model.Conta;
-import br.com.org.apibancookay.service.ClienteService;
-import br.com.org.apibancookay.service.ContaService;
 
 @RestController
 @RequestMapping("/conta")
@@ -22,9 +22,9 @@ import br.com.org.apibancookay.service.ContaService;
 public class ContaController {
 
 	@Autowired
-	private ContaService contaService;
+	private ContaServiceInterface contaServiceInterface;
 	@Autowired
-	private ClienteService clienteService;
+	private ClienteServiceInterface clienteServiceInterface;
 
 	@GetMapping("logar/{pCpf}/{pSenhaCliente}")
 	public ResponseEntity<ContaDto> logarContaCpfSenhaCliente(@PathVariable String pCpf, @PathVariable String pSenhaCliente) {
@@ -38,15 +38,16 @@ public class ContaController {
 			return ResponseEntity.badRequest().body(contaDto);
 		}
 		
-		Cliente procurarClienteCpfSenhaCliente = clienteService.procurarClienteCpfSenhaCliente(pCpf, pSenhaCliente);
+		Cliente procurarClienteCpfSenhaCliente = clienteServiceInterface.procurarClienteCpfSenhaCliente(pCpf, pSenhaCliente);
 		if (procurarClienteCpfSenhaCliente == null) {
 			contaDto.setResposta("Cliente não existe");
 			return ResponseEntity.badRequest().body(contaDto);
 		} 		
 		
-		Conta procurarContaId = contaService.procurarContaId(procurarClienteCpfSenhaCliente.getId());
+		Conta procurarContaId = contaServiceInterface.procurarContaId(procurarClienteCpfSenhaCliente.getId());
 		contaDto.setResposta("Login com sucesso");
 		BeanUtils.copyProperties(procurarContaId, contaDto);
 		return ResponseEntity.ok(contaDto);
 	}
+	
 }

@@ -31,48 +31,57 @@ public class ClienteDto {
 
 	public String validarCpf() {
 		String expressao = cpf.replace(".", "").replace("-", "");
-		if (expressao.equals("00000000000") || expressao.equals("11111111111") || expressao.equals("22222222222")
-				|| expressao.equals("33333333333") || expressao.equals("44444444444") || expressao.equals("55555555555")
-				|| expressao.equals("66666666666") || expressao.equals("77777777777") || expressao.equals("88888888888")
-				|| expressao.equals("99999999999") || (expressao.length() != 11)) {
+		if (
+			expressao.equals("00000000000") ||
+			expressao.equals("11111111111") ||
+			expressao.equals("22222222222") || 
+			expressao.equals("33333333333") || 
+			expressao.equals("44444444444") || 
+			expressao.equals("55555555555") || 
+			expressao.equals("66666666666") || 
+			expressao.equals("77777777777") || 
+			expressao.equals("88888888888") ||
+			expressao.equals("99999999999") ||
+			expressao.length() != 11
+		) {
 			return "CPF invalido";
 		}
 
-		char dig10, dig11;
-		int sm, i, r, num, peso;
+		char digito10, digito11;
+		int soma, i, resultado, numero, peso;
 
 		try {
-			sm = 0;
+			soma = 0;
 			peso = 10;
 			for (i = 0; i < 9; i++) {
-				num = (int) (expressao.charAt(i) - 48);
-				sm = sm + (num * peso);
+				numero = (int) (expressao.charAt(i) - 48);
+				soma = soma + (numero * peso);
 				peso = peso - 1;
 			}
 
-			r = 11 - (sm % 11);
-			if ((r == 10) || (r == 11)) {
-				dig10 = '0';
+			resultado = 11 - (soma % 11);
+			if ((resultado == 10) || (resultado == 11)) {
+				digito10 = '0';
 			} else {
-				dig10 = (char) (r + 48);
+				digito10 = (char) (resultado + 48);
 			}
 
-			sm = 0;
+			soma = 0;
 			peso = 11;
 			for (i = 0; i < 10; i++) {
-				num = (int) (expressao.charAt(i) - 48);
-				sm = sm + (num * peso);
+				numero = (int) (expressao.charAt(i) - 48);
+				soma = soma + (numero * peso);
 				peso = peso - 1;
 			}
 
-			r = 11 - (sm % 11);
-			if ((r == 10) || (r == 11)) {
-				dig11 = '0';
+			resultado = 11 - (soma % 11);
+			if ((resultado == 10) || (resultado == 11)) {
+				digito11 = '0';
 			} else {
-				dig11 = (char) (r + 48);
+				digito11 = (char) (resultado + 48);
 			}
 
-			if ((dig10 == expressao.charAt(9)) && (dig11 == expressao.charAt(10))) {
+			if ((digito10 == expressao.charAt(9)) && (digito11 == expressao.charAt(10))) {
 				return "CPF valido";
 			} else {
 				return "CPF invalido";
