@@ -26,15 +26,16 @@ public class ContaController {
 	@Autowired
 	private ClienteServiceInterface clienteServiceInterface;
 
-	@GetMapping("logar/{pCpf}/{pSenhaCliente}")
-	public ResponseEntity<ContaDto> logarContaCpfSenhaCliente(@PathVariable String pCpf, @PathVariable String pSenhaCliente) {
+	@GetMapping("procurar_cpf_senha_cliente/{pCpf}/{pSenhaCliente}")
+	public ResponseEntity<ContaDto> procurarContaCpfSenhaCliente(@PathVariable String pCpf, @PathVariable String pSenhaCliente) {
 		ClienteDto clienteDto = new ClienteDto();
 		clienteDto.setCpf(pCpf);
 		clienteDto.setSenhaCliente(pSenhaCliente);
 		ContaDto contaDto = new ContaDto();
 		
-		if (!clienteDto.validarLogin().isEmpty()) {
-			contaDto.setResposta(clienteDto.validarLogin());
+		String validarProcurarContaCpfSenhaCliente = clienteDto.validarProcurarContaCpfSenhaCliente();
+		if (!validarProcurarContaCpfSenhaCliente.isEmpty()) {
+			contaDto.setResposta(validarProcurarContaCpfSenhaCliente);
 			return ResponseEntity.badRequest().body(contaDto);
 		}
 		
@@ -45,8 +46,24 @@ public class ContaController {
 		} 		
 		
 		Conta procurarContaId = contaServiceInterface.procurarContaId(procurarClienteCpfSenhaCliente.getId());
-		contaDto.setResposta("Login com sucesso");
+		contaDto.setResposta("Conta encontrada");
 		BeanUtils.copyProperties(procurarContaId, contaDto);
+		return ResponseEntity.ok(contaDto);
+	}
+	
+	@GetMapping("procurar_agencia_conta/{pAgencia}/{pConta}")
+	public ResponseEntity<ContaDto> procurarContaAgenciaConta(@PathVariable String pAgencia, @PathVariable String pConta) {
+		ContaDto contaDto = new ContaDto();
+		contaDto.setAgencia(pAgencia);
+		contaDto.setConta(pConta);
+		
+		String validarProcurarContaAgenciaConta = contaDto.validarProcurarContaAgenciaConta();
+		if (!validarProcurarContaAgenciaConta.isEmpty()) {
+			contaDto.setResposta(validarProcurarContaAgenciaConta);
+			return ResponseEntity.badRequest().body(contaDto);
+		}
+		
+		contaDto.setResposta("Conta encontrada");
 		return ResponseEntity.ok(contaDto);
 	}
 	

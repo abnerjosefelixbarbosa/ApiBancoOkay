@@ -18,12 +18,12 @@ public class ClienteDto {
 	private String cidade;
 	private String estado;
 
-	public String validarLogin() {
+	public String validarProcurarContaCpfSenhaCliente() {
 		if (!validarCpf().equals("CPF valido")) {
 			return validarCpf();
 		}
 		if (senhaCliente.length() < 6) {
-			return "Senha deve ter 6 digitos";
+			return "Senha menor que 6 digitos";
 		}
 		
 		return "";
