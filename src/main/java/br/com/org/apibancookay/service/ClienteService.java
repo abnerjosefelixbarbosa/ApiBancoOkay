@@ -16,7 +16,7 @@ public class ClienteService implements ClienteServiceInterface {
 	@Override
 	public Cliente procurarClienteCpfSenhaCliente(String pCpf, String pSenhaCliente) {
 		try {
-			if (clienteRepository.existsByCpfAndSenhaCliente(pCpf, pSenhaCliente) == false) {
+			if (!clienteRepository.existsByCpfAndSenhaCliente(pCpf, pSenhaCliente)) {
 				return null;
 			}
 			

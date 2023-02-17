@@ -21,5 +21,18 @@ public class ContaService implements ContaServiceInterface {
 			return null;
 		}		
 	}
+
+	@Override
+	public Conta procurarContaAgenciaConta(String pAgencia, String pConta) {
+		try {
+			if (!contaReposirory.existsByAgenciaAndConta(pAgencia, pConta)) {
+				return null;
+			}
+			
+			return contaReposirory.findByAgenciaAndConta(pAgencia, pConta).get();
+		} catch (Exception e) {
+			return null;
+		}		
+	}
 	
 }

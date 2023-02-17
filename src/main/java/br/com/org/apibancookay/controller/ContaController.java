@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +43,7 @@ public class ContaController {
 		
 		Cliente procurarClienteCpfSenhaCliente = clienteServiceInterface.procurarClienteCpfSenhaCliente(pCpf, pSenhaCliente);
 		if (procurarClienteCpfSenhaCliente == null) {
-			contaDto.setResposta("Cliente não existe");
+			contaDto.setResposta("Cliente não encontrado");
 			return ResponseEntity.badRequest().body(contaDto);
 		} 		
 		
@@ -63,8 +65,20 @@ public class ContaController {
 			return ResponseEntity.badRequest().body(contaDto);
 		}
 		
+		Conta procurarContaAgenciaConta = contaServiceInterface.procurarContaAgenciaConta(pAgencia, pConta);
+		if (procurarContaAgenciaConta == null) {
+			contaDto.setResposta("Conta não encontrada");
+			return ResponseEntity.badRequest().body(contaDto);
+		}
+				
 		contaDto.setResposta("Conta encontrada");
+		BeanUtils.copyProperties(procurarContaAgenciaConta, contaDto);
 		return ResponseEntity.ok(contaDto);
+	}
+	
+	@PutMapping("transferir_saldo/{pId1}/{pId2}")
+	public ResponseEntity<ContaDto> transferirSaldoConta(@PathVariable Long pId1, @PathVariable Long pId2, @RequestBody ContaDto contaDto) {
+		return null;
 	}
 	
 }

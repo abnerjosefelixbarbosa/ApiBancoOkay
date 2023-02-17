@@ -10,4 +10,6 @@ import br.com.org.apibancookay.model.Conta;
 @Repository
 public interface ContaReposirory extends JpaRepository<Conta, Long> {
 	Optional<Conta> findById(Long id);
+	boolean existsByAgenciaAndConta(String pAgencia, String pConta);
+	Optional<Conta> findByAgenciaAndConta(String pAgencia, String pConta);
 }
