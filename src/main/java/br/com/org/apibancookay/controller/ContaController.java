@@ -1,5 +1,6 @@
 package br.com.org.apibancookay.controller;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.org.apibancookay.dto.ContaDto;
 import br.com.org.apibancookay.dto.ValidacaoClienteCpfSenhaClienteDto;
 import br.com.org.apibancookay.dto.ValidacaoContaAgenciaContaDto;
+import br.com.org.apibancookay.dto.ValidacaoContaSaldoDto;
 import br.com.org.apibancookay.interfaces.ClienteServiceInterface;
 import br.com.org.apibancookay.interfaces.ContaServiceInterface;
 import br.com.org.apibancookay.model.Cliente;
@@ -73,13 +75,34 @@ public class ContaController {
 		return ResponseEntity.ok(contaDto);
 	}
 	
-	@PutMapping("transferir_saldo/{id1}/{id2}")
-	public ResponseEntity<ContaDto> transferirSaldoConta(@PathVariable Long id1, @PathVariable Long id2,@Valid @RequestBody ContaDto contaDto) {
-		if (!contaDto.validarTransferirSaldoConta().isEmpty()) {
-			contaDto.setResposta(contaDto.validarTransferirSaldoConta());
+	@PutMapping("transferir_saldo/{pIdLogada}/{pIdProcurada}")
+	public ResponseEntity<ContaDto> transferirSaldoConta(@PathVariable Long pIdLogada, @PathVariable Long pIdProcurada, @Valid @RequestBody ValidacaoContaSaldoDto validacaoContaSaldoDto) {
+		ContaDto contaDto = new ContaDto();
+		
+		if (pIdLogada == pIdProcurada) {
+			contaDto.setResposta("Contas identicas");
 			return ResponseEntity.badRequest().body(contaDto);
 		}
 		
+		Conta procurarContaIdLogada = contaServiceInterface.procurarContaId(pIdLogada);
+		if (procurarContaIdLogada == null) {
+			contaDto.setResposta("Conta logada não encontrada");
+			return ResponseEntity.badRequest().body(contaDto);
+		}
+		
+		Conta procurarContaIdProcurada = contaServiceInterface.procurarContaId(pIdProcurada);
+		if (procurarContaIdProcurada == null) {
+			contaDto.setResposta("Conta procurada não encontrada");
+			return ResponseEntity.badRequest().body(contaDto);
+		}
+		
+		BigDecimal saldo = validacaoContaSaldoDto.getSaldo();
+		procurarContaIdLogada.sacar(saldo);
+		procurarContaIdProcurada.depositar(saldo);
+		Conta alterarContaLogada =  contaServiceInterface.alterarConta(procurarContaIdLogada);
+		System.out.println(alterarContaLogada.getSaldo());
+		contaServiceInterface.alterarConta(procurarContaIdProcurada);
+		BeanUtils.copyProperties(alterarContaLogada, contaDto);
 		contaDto.setResposta("Saldo transferido");
 		return ResponseEntity.ok(contaDto);
 	}

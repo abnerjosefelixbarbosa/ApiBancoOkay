@@ -29,6 +29,14 @@ public class Conta implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "id_cliente", referencedColumnName = "id", nullable = false, unique = true)
 	private Cliente cliente;
+	
+	public void depositar(BigDecimal saldo) {
+		this.saldo.add(saldo);
+	}
+	
+    public void sacar(BigDecimal saldo) {
+    	this.saldo.subtract(saldo);
+	}
 
 	public Long getId() {
 		return id;

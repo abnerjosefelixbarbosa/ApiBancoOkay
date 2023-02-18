@@ -16,6 +16,10 @@ public class ContaService implements ContaServiceInterface {
 	@Override
 	public Conta procurarContaId(Long pId) {
 		try {
+			if (!contaReposirory.existsById(pId)) {
+				return null;
+			}
+			
 			return contaReposirory.findById(pId).get();
 		} catch (Exception e) {
 			return null;
@@ -33,6 +37,15 @@ public class ContaService implements ContaServiceInterface {
 		} catch (Exception e) {
 			return null;
 		}		
+	}
+
+	@Override
+	public Conta alterarConta(Conta conta) {
+		try {
+			return contaReposirory.save(conta);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 }
