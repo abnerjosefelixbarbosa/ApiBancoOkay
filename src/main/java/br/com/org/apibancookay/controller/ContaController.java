@@ -99,11 +99,10 @@ public class ContaController {
 		BigDecimal saldo = validacaoContaSaldoDto.getSaldo();
 		procurarContaIdLogada.sacar(saldo);
 		procurarContaIdProcurada.depositar(saldo);
-		Conta alterarContaLogada =  contaServiceInterface.alterarConta(procurarContaIdLogada);
-		System.out.println(alterarContaLogada.getSaldo());
+		Conta contaLogada = contaServiceInterface.alterarConta(procurarContaIdLogada);
 		contaServiceInterface.alterarConta(procurarContaIdProcurada);
-		BeanUtils.copyProperties(alterarContaLogada, contaDto);
 		contaDto.setResposta("Saldo transferido");
+		BeanUtils.copyProperties(contaLogada, contaDto);
 		return ResponseEntity.ok(contaDto);
 	}
 	
