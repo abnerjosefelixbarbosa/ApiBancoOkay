@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.org.apibancookay.dto.ContaDto;
 import br.com.org.apibancookay.dto.ValidacaoClienteCpfSenhaClienteDto;
+import br.com.org.apibancookay.dto.ValidacaoContaAgenciaContaDto;
 import br.com.org.apibancookay.interfaces.ClienteServiceInterface;
 import br.com.org.apibancookay.interfaces.ContaServiceInterface;
 import br.com.org.apibancookay.model.Cliente;
@@ -55,19 +56,13 @@ public class ContaController {
 		return ResponseEntity.ok(contaDto);
 	}
 	
-	@GetMapping("procurar_agencia_conta/{pAgencia}/{pConta}")
-	public ResponseEntity<ContaDto> procurarContaAgenciaConta(@PathVariable String pAgencia, @PathVariable String pConta) {
+	@GetMapping("procurar_agencia_conta")
+	public ResponseEntity<ContaDto> procurarContaAgenciaConta(@Valid @RequestBody ValidacaoContaAgenciaContaDto validacaoContaAgenciaContaDto) {
 		ContaDto contaDto = new ContaDto();
-		contaDto.setAgencia(pAgencia);
-		contaDto.setConta(pConta);
 		
-		String validarProcurarContaAgenciaConta = contaDto.validarProcurarContaAgenciaConta();
-		if (!validarProcurarContaAgenciaConta.isEmpty()) {
-			contaDto.setResposta(validarProcurarContaAgenciaConta);
-			return ResponseEntity.badRequest().body(contaDto);
-		}
-		
-		Conta procurarContaAgenciaConta = contaServiceInterface.procurarContaAgenciaConta(pAgencia, pConta);
+		String agencia = validacaoContaAgenciaContaDto.getAgencia();
+		String conta = validacaoContaAgenciaContaDto.getConta();
+		Conta procurarContaAgenciaConta = contaServiceInterface.procurarContaAgenciaConta(agencia, conta);
 		if (procurarContaAgenciaConta == null) {
 			contaDto.setResposta("Conta não encontrada");
 			return ResponseEntity.badRequest().body(contaDto);
@@ -78,8 +73,8 @@ public class ContaController {
 		return ResponseEntity.ok(contaDto);
 	}
 	
-	@PutMapping("transferir_saldo/{pId1}/{pId2}")
-	public ResponseEntity<ContaDto> transferirSaldoConta(@PathVariable Long pId1, @PathVariable Long pId2, @RequestBody ContaDto contaDto) {
+	@PutMapping("transferir_saldo/{id1}/{id2}")
+	public ResponseEntity<ContaDto> transferirSaldoConta(@PathVariable Long id1, @PathVariable Long id2,@Valid @RequestBody ContaDto contaDto) {
 		if (!contaDto.validarTransferirSaldoConta().isEmpty()) {
 			contaDto.setResposta(contaDto.validarTransferirSaldoConta());
 			return ResponseEntity.badRequest().body(contaDto);
