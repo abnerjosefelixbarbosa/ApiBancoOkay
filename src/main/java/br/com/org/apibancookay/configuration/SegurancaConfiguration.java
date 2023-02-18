@@ -15,6 +15,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SegurancaConfiguration {
+	
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.headers().frameOptions().disable();
@@ -33,4 +34,5 @@ public class SegurancaConfiguration {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+    
 }

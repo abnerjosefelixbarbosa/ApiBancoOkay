@@ -10,6 +10,7 @@ import br.com.org.apibancookay.configuration.DataConfiguration;
 
 @SpringBootApplication
 public class ApiBancoOkayApplication implements ApplicationRunner {
+	
 	@Autowired
 	private DataConfiguration dataConfiguration;
 
@@ -21,4 +22,5 @@ public class ApiBancoOkayApplication implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		dataConfiguration.configurar();
 	}
+	
 }

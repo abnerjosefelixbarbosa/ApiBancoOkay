@@ -41,7 +41,11 @@ public class ContaService implements ContaServiceInterface {
 
 	@Override
 	public Conta alterarConta(Conta conta) {
-		return contaReposirory.save(conta);
+		try {
+			return contaReposirory.save(conta);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 }
