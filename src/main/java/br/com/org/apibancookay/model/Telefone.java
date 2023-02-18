@@ -8,10 +8,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "telefone")
 public class Telefone implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -22,27 +27,4 @@ public class Telefone implements Serializable {
 	@JoinColumn(name = "id_cliente", referencedColumnName = "id", nullable = false, unique = true)
 	private Cliente cliente;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getTelefone() {
-		return telefone;
-	}
-
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
 }
