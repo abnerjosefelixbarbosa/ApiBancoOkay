@@ -48,12 +48,10 @@ public class ContaController {
 		String senhaCliente = validacaoClienteCpfSenhaClienteDto.getSenhaCliente();
 		Cliente procurarClienteCpfSenhaCliente = clienteServiceInterface.procurarClienteCpfSenhaCliente(cpf, senhaCliente);
 		if (procurarClienteCpfSenhaCliente == null) {
-			contaDto.setResposta("Cliente não encontrado");
-			return ResponseEntity.badRequest().body(contaDto);
+			return ResponseEntity.notFound().build();
 		} 		
 		
 		Conta procurarContaId = contaServiceInterface.procurarContaId(procurarClienteCpfSenhaCliente.getId());
-		contaDto.setResposta("Conta encontrada");
 		BeanUtils.copyProperties(procurarContaId, contaDto);
 		return ResponseEntity.ok(contaDto);
 	}
@@ -66,11 +64,9 @@ public class ContaController {
 		String conta = validacaoContaAgenciaContaDto.getConta();
 		Conta procurarContaAgenciaConta = contaServiceInterface.procurarContaAgenciaConta(agencia, conta);
 		if (procurarContaAgenciaConta == null) {
-			contaDto.setResposta("Conta não encontrada");
-			return ResponseEntity.badRequest().body(contaDto);
+			return ResponseEntity.notFound().build();
 		}
 				
-		contaDto.setResposta("Conta encontrada");
 		BeanUtils.copyProperties(procurarContaAgenciaConta, contaDto);
 		return ResponseEntity.ok(contaDto);
 	}
@@ -80,20 +76,17 @@ public class ContaController {
 		ContaDto contaDto = new ContaDto();
 		
 		if (pIdLogada == pIdProcurada) {
-			contaDto.setResposta("Contas identicas");
 			return ResponseEntity.badRequest().body(contaDto);
 		}
 		
 		Conta procurarContaIdLogada = contaServiceInterface.procurarContaId(pIdLogada);
 		if (procurarContaIdLogada == null) {
-			contaDto.setResposta("Conta logada não encontrada");
-			return ResponseEntity.badRequest().body(contaDto);
+			return ResponseEntity.notFound().build();
 		}
 		
 		Conta procurarContaIdProcurada = contaServiceInterface.procurarContaId(pIdProcurada);
 		if (procurarContaIdProcurada == null) {
-			contaDto.setResposta("Conta procurada não encontrada");
-			return ResponseEntity.badRequest().body(contaDto);
+			return ResponseEntity.notFound().build();
 		}
 		
 		BigDecimal saldo = validacaoContaSaldoDto.getSaldo();
@@ -101,7 +94,6 @@ public class ContaController {
 		procurarContaIdProcurada.depositar(saldo);
 		Conta contaLogada = contaServiceInterface.alterarConta(procurarContaIdLogada);
 		contaServiceInterface.alterarConta(procurarContaIdProcurada);
-		contaDto.setResposta("Saldo transferido");
 		BeanUtils.copyProperties(contaLogada, contaDto);
 		return ResponseEntity.ok(contaDto);
 	}

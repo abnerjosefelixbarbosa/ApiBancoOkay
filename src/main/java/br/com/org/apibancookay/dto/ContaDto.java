@@ -16,6 +16,5 @@ public class ContaDto {
 	private BigDecimal saldo;
 	private String senhaConta;
 	private Cliente cliente;
-	private String resposta;
 	
 }
