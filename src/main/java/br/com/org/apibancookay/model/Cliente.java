@@ -8,11 +8,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "cliente", indexes = { @Index(columnList = "cpf"), @Index(columnList = "senhaCliente") })
 public class Cliente implements Serializable {

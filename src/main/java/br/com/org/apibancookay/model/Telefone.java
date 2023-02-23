@@ -8,11 +8,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "telefone")
 public class Telefone implements Serializable {

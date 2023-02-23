@@ -10,11 +10,11 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "conta", indexes = { @Index(columnList = "agencia"), @Index(columnList = "conta") })
 public class Conta implements Serializable {

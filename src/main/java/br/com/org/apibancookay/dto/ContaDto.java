@@ -3,11 +3,11 @@ package br.com.org.apibancookay.dto;
 import java.math.BigDecimal;
 
 import br.com.org.apibancookay.model.Cliente;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class ContaDto {
 	
 	private Long id;
