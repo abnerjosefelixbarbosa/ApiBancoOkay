@@ -1,5 +1,7 @@
 package br.com.org.apibancookay.controller;
 
+import java.util.Collection;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,17 +23,26 @@ public class ClienteController {
 	@Autowired
 	private ClienteInterface clienteInterface;
 
-	@GetMapping("/procurarcpfsenhacliente/{pCpf}/{pSenhaCliente}")
-	public ResponseEntity<ClienteDto> procurarCpfSenhaCliente(@PathVariable String pCpf,
+	@GetMapping("/procurarporcpfesenhadocliente/{pCpf}/{pSenhaCliente}")
+	public ResponseEntity<ClienteDto> procurarPorCpfESenhaDoCliente(@PathVariable String pCpf,
 			@PathVariable String pSenhaCliente) {
-		ClienteDto clienteDto = new ClienteDto();
-		Cliente resultado = clienteInterface.procurarCpfSenhaCliente(pCpf, pSenhaCliente);
+		ClienteDto dto = new ClienteDto();
+		dto.setCpf(pCpf);
+		dto.setSenhaCliente(pSenhaCliente);
+		dto.limparErros();
 
-		if (resultado == null)
-			return ResponseEntity.notFound().build();
+		Collection<String> erros = dto.validacaoProcurarPorCpfSenhaCliente();
+		if (!erros.isEmpty())
+			return ResponseEntity.badRequest().body(dto);
 
-		BeanUtils.copyProperties(resultado, clienteDto);
-		return ResponseEntity.ok(clienteDto);
+		Cliente resultado = clienteInterface.procurarPorCpfESenhaDoCliente(pCpf, pSenhaCliente);
+		if (resultado == null) {
+			dto.adicionarErros("Cliente não encotrado");
+			return ResponseEntity.badRequest().body(dto);
+		}
+
+		BeanUtils.copyProperties(resultado, dto);
+		return ResponseEntity.ok(dto);
 	}
 
 }

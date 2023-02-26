@@ -11,7 +11,7 @@ public class DataConfiguration implements DataInterface {
 	
 	@Override
 	public void configurar() {
-		System.out.println("configurações de dev");
+		System.out.println("configurações de desenvolvimento");
 	}
 	
 }
