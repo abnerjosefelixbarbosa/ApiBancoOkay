@@ -14,7 +14,7 @@ public class ContaService implements ContaInterface {
 	private ContaReposirory contaReposirory;
 
 	@Override
-	public Conta procurarId(Long pId) {
+	public Conta procurarPeloId(Long pId) {
 		if (!contaReposirory.existsById(pId))
 			return null;
 
@@ -22,7 +22,7 @@ public class ContaService implements ContaInterface {
 	}
 
 	@Override
-	public Conta procurarAgenciaConta(String pAgencia, String pConta) {
+	public Conta procurarPelaAgenciaeConta(String pAgencia, String pConta) {
 		if (!contaReposirory.existsByAgenciaAndConta(pAgencia, pConta))
 			return null;
 

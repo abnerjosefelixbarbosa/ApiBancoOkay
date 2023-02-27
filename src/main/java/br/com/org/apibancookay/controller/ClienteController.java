@@ -1,6 +1,6 @@
 package br.com.org.apibancookay.controller;
 
-import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,26 +23,31 @@ public class ClienteController {
 	@Autowired
 	private ClienteInterface clienteInterface;
 
-	@GetMapping("/procurarporcpfesenhadocliente/{pCpf}/{pSenhaCliente}")
-	public ResponseEntity<ClienteDto> procurarPorCpfESenhaDoCliente(@PathVariable String pCpf,
+	@GetMapping("/procurarpelocpfesenhadocliente/{pCpf}/{pSenhaCliente}")
+	public ResponseEntity<ClienteDto> procurarpeloCpfeSenhaDoCliente(@PathVariable String pCpf,
 			@PathVariable String pSenhaCliente) {
 		ClienteDto dto = new ClienteDto();
 		dto.setCpf(pCpf);
 		dto.setSenhaCliente(pSenhaCliente);
 		dto.limparErros();
+		
+		try {
+			Map<Integer, String> erros = dto.validacaoProcurarPorCpfSenhaCliente();
+			if (!erros.isEmpty())
+				return ResponseEntity.status(400).body(dto);
 
-		Collection<String> erros = dto.validacaoProcurarPorCpfSenhaCliente();
-		if (!erros.isEmpty())
-			return ResponseEntity.badRequest().body(dto);
+			Cliente resultado = clienteInterface.procurarPorCpfESenhaDoCliente(pCpf, pSenhaCliente);
+			if (resultado == null) {
+				dto.adicionarErros(2, "Cliente não encotrado");
+				return ResponseEntity.status(404).body(dto);
+			}
 
-		Cliente resultado = clienteInterface.procurarPorCpfESenhaDoCliente(pCpf, pSenhaCliente);
-		if (resultado == null) {
-			dto.adicionarErros("Cliente não encotrado");
-			return ResponseEntity.badRequest().body(dto);
+			BeanUtils.copyProperties(resultado, dto);
+			return ResponseEntity.status(200).body(dto);
+		} catch (Exception e) {
+			dto.adicionarErros(3, "Error dentro do servidor");
+			return ResponseEntity.status(500).body(dto);
 		}
-
-		BeanUtils.copyProperties(resultado, dto);
-		return ResponseEntity.ok(dto);
 	}
 
 }

@@ -1,8 +1,8 @@
 package br.com.org.apibancookay.dto;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,24 +28,20 @@ public class ClienteDto {
 	private String bairro;
 	private String cidade;
 	private String estado;
-	private Collection<String> erros = new ArrayList<String>();
-	
+	private Map<Integer, String> erros = new HashMap<>();
+
 	public void limparErros() {
 		erros.clear();
 	}
-	
-	public void adicionarErros(String valor) {
-		erros.add(valor);
+
+	public void adicionarErros(Integer chave, String valor) {
+		erros.put(chave, valor);
 	}
 
-	public Collection<String> validacaoProcurarPorCpfSenhaCliente() {
+	public Map<Integer, String> validacaoProcurarPorCpfSenhaCliente() {
 		limparErros();
-		if (!cpfValido()) {
-			adicionarErros("CPF invalido");
-		}
-		if (senhaCliente.isEmpty()) {
-			adicionarErros("Senha vazia");
-		}
+		if (!cpfValido())
+			adicionarErros(1, "CPF invalido");
 
 		return erros;
 	}
@@ -112,7 +108,7 @@ public class ClienteDto {
 
 			if (digito10 != cpf.charAt(9) || digito11 != cpf.charAt(10))
 				return false;
-			
+
 			return true;
 		} catch (Exception e) {
 			return false;

@@ -23,22 +23,28 @@ public class ContaController {
 	@Autowired
 	private ContaInterface contaInterface;
 
-	@GetMapping("/procurarid/{pId}")
-	public ResponseEntity<ContaDto> procurarId(@PathVariable Long pId) {
-		ContaDto contaDto = new ContaDto();
-		Conta resultado = contaInterface.procurarId(pId);
+	@GetMapping("/procurarpeloid/{pId}")
+	public ResponseEntity<ContaDto> procurarPeloId(@PathVariable Long pId) {
+		ContaDto dto = new ContaDto();
+		dto.limparErros();
 
-		if (resultado == null)
-			return ResponseEntity.notFound().build();
+		try {
+			Conta resultado = contaInterface.procurarPeloId(pId);
 
-		BeanUtils.copyProperties(resultado, contaDto);
-		return ResponseEntity.ok(contaDto);
+			if (resultado == null)
+				return ResponseEntity.status(404).body(dto);
+
+			BeanUtils.copyProperties(resultado, dto);
+			return ResponseEntity.status(200).body(dto);
+		} catch (Exception e) {
+			return ResponseEntity.status(500).body(dto);
+		}
 	}
 
 	@GetMapping("/procuraragenciaconta/{pAgencia}/{pConta}")
 	public ResponseEntity<ContaDto> procurarAgenciaConta(@PathVariable String pAgencia, @PathVariable String pConta) {
 		ContaDto contaDto = new ContaDto();
-		Conta resultado = contaInterface.procurarAgenciaConta(pAgencia, pConta);
+		Conta resultado = contaInterface.procurarPelaAgenciaeConta(pAgencia, pConta);
 
 		if (resultado == null)
 			return ResponseEntity.notFound().build();
@@ -49,7 +55,7 @@ public class ContaController {
 
 	@PutMapping("/sacar/{pId}")
 	public ResponseEntity<ContaDto> sacar(@PathVariable Long pId, @RequestBody ContaDto contaDto) {
-		Conta resultado = contaInterface.procurarId(pId);
+		Conta resultado = contaInterface.procurarPeloId(pId);
 
 		if (resultado == null)
 			return ResponseEntity.notFound().build();
@@ -62,7 +68,7 @@ public class ContaController {
 
 	@PutMapping("/depositar/{pId}")
 	public ResponseEntity<ContaDto> depositar(@PathVariable Long pId, @RequestBody ContaDto contaDto) {
-		Conta resultado = contaInterface.procurarId(pId);
+		Conta resultado = contaInterface.procurarPeloId(pId);
 
 		if (resultado == null)
 			return ResponseEntity.notFound().build();
