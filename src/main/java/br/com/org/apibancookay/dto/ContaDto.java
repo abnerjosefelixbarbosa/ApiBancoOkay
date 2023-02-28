@@ -28,6 +28,13 @@ public class ContaDto {
 		erros.put(chave, valor);
 	}
 	
-	
+	public Map<Integer, String> validacaoAlterar() {	
+		limparErros();		
+		if (saldo.doubleValue() == 0) {
+			adicionarErros(1, "Valor nulo");
+		}
+		
+		return erros;		
+	}
 	
 }

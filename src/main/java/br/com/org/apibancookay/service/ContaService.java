@@ -22,7 +22,7 @@ public class ContaService implements ContaInterface {
 	}
 
 	@Override
-	public Conta procurarPelaAgenciaeConta(String pAgencia, String pConta) {
+	public Conta procurarPelaAgenciaConta(String pAgencia, String pConta) {
 		if (!contaReposirory.existsByAgenciaAndConta(pAgencia, pConta))
 			return null;
 

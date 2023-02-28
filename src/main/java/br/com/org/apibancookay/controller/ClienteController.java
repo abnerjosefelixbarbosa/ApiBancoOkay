@@ -23,8 +23,8 @@ public class ClienteController {
 	@Autowired
 	private ClienteInterface clienteInterface;
 
-	@GetMapping("/procurarpelocpfesenhadocliente/{pCpf}/{pSenhaCliente}")
-	public ResponseEntity<ClienteDto> procurarpeloCpfeSenhaDoCliente(@PathVariable String pCpf,
+	@GetMapping("/procurarpelocpfsenhadocliente/{pCpf}/{pSenhaCliente}")
+	public ResponseEntity<ClienteDto> procurarPeloCpfSenhaDoCliente(@PathVariable String pCpf,
 			@PathVariable String pSenhaCliente) {
 		ClienteDto dto = new ClienteDto();
 		dto.setCpf(pCpf);
@@ -36,7 +36,7 @@ public class ClienteController {
 			if (!erros.isEmpty())
 				return ResponseEntity.status(400).body(dto);
 
-			Cliente resultado = clienteInterface.procurarPorCpfESenhaDoCliente(pCpf, pSenhaCliente);
+			Cliente resultado = clienteInterface.procurarPorCpfSenhaDoCliente(pCpf, pSenhaCliente);
 			if (resultado == null) {
 				dto.adicionarErros(2, "Cliente não encotrado");
 				return ResponseEntity.status(404).body(dto);
@@ -45,7 +45,7 @@ public class ClienteController {
 			BeanUtils.copyProperties(resultado, dto);
 			return ResponseEntity.status(200).body(dto);
 		} catch (Exception e) {
-			dto.adicionarErros(3, "Error dentro do servidor");
+			dto.adicionarErros(3, "Error no servidor");
 			return ResponseEntity.status(500).body(dto);
 		}
 	}
