@@ -15,16 +15,18 @@ public class ContaService implements ContaInterface {
 
 	@Override
 	public Conta procurarPeloId(Long pId) {
-		if (!contaReposirory.existsById(pId))
+		if (!contaReposirory.existsById(pId)) {
 			return null;
+		}
 
 		return contaReposirory.findById(pId).get();
 	}
 
 	@Override
 	public Conta procurarPelaAgenciaConta(String pAgencia, String pConta) {
-		if (!contaReposirory.existsByAgenciaAndConta(pAgencia, pConta))
+		if (!contaReposirory.existsByAgenciaAndConta(pAgencia, pConta)) {
 			return null;
+		}
 
 		return contaReposirory.findByAgenciaAndConta(pAgencia, pConta).get();
 	}

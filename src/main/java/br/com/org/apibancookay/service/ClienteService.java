@@ -9,14 +9,15 @@ import br.com.org.apibancookay.repository.ClienteRepository;
 
 @Service
 public class ClienteService implements ClienteInterface {
-
+	
 	@Autowired
 	private ClienteRepository clienteRepository;
 
 	@Override
-	public Cliente procurarPorCpfSenhaDoCliente(String pCpf, String pSenhaCliente) {
-		if (!clienteRepository.existsByCpfAndSenhaCliente(pCpf, pSenhaCliente))
+	public Cliente procurarPorCpfSenhaDoCliente(String pCpf, String pSenhaCliente) {		
+		if (!clienteRepository.existsByCpfAndSenhaCliente(pCpf, pSenhaCliente)) {
 			return null;
+		}
 		
 		return clienteRepository.findByCpfAndSenhaCliente(pCpf, pSenhaCliente).get();
 	}

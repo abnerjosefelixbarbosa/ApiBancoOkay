@@ -1,8 +1,6 @@
 package br.com.org.apibancookay.dto;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,22 +26,16 @@ public class ClienteDto {
 	private String bairro;
 	private String cidade;
 	private String estado;
-	private Map<Integer, String> erros = new HashMap<>();
+	private String erro;
 
-	public void limparErros() {
-		erros.clear();
-	}
+	public String validacaoProcurarPorCpfSenhaCliente() {
+		String erro = "";
+		
+		if (!cpfValido()) {
+			erro = "cpf invalido";
+		}
 
-	public void adicionarErros(Integer chave, String valor) {
-		erros.put(chave, valor);
-	}
-
-	public Map<Integer, String> validacaoProcurarPorCpfSenhaCliente() {
-		limparErros();
-		if (!cpfValido())
-			adicionarErros(1, "CPF invalido");
-
-		return erros;
+		return erro;
 	}
 
 	public boolean cpfValido() {
@@ -87,10 +79,11 @@ public class ClienteDto {
 			}
 
 			resto = 11 - (soma % 11);
-			if (resto == 10 || resto == 11)
+			if (resto == 10 || resto == 11) {
 				digito10 = '0';
-			else
+			} else {
 				digito10 = (char) (resto + 48);
+			}
 
 			soma = 0;
 			peso = 11;
@@ -101,14 +94,16 @@ public class ClienteDto {
 			}
 
 			resto = 11 - (soma % 11);
-			if (resto == 10 || resto == 11)
+			if (resto == 10 || resto == 11) {
 				digito11 = '0';
-			else
+			} else {
 				digito11 = (char) (resto + 48);
-
-			if (digito10 != cpf.charAt(9) || digito11 != cpf.charAt(10))
+			}
+			
+			if (digito10 != cpf.charAt(9) || digito11 != cpf.charAt(10)) {
 				return false;
-
+			}
+			
 			return true;
 		} catch (Exception e) {
 			return false;
